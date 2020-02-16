@@ -122,8 +122,8 @@ bot.command('addlista', ctx => {
     } catch (e) {
         if (e.message == errInitMsg) {
             ctx.reply(e.message);
-        } else if (e instanceof TypeError) {
-            ctx.reply(unknownError);
+        } else  {
+            ctx.reply(e.msg);
         }
     }
 
@@ -153,9 +153,53 @@ bot.command('add', ctx => {
     } catch (e) {
         if (e.message == errInitMsg) {
             ctx.reply(e.message);
-        } else if (e instanceof TypeError) {
-            ctx.reply(unknownError);
+        } else  {
+            ctx.reply(e.msg);
+        }
+    }
 
+
+    //logOutMsg(ctx, aboutMsg);
+
+});
+
+bot.command('addvarios', ctx => {
+    logMsg(ctx);
+    try {
+        var words = ctx.message.text.split(':');
+
+        var listName = words[0].split(' ');
+        listName.shift(); //borramos la primera palabra  (que es la llamada al comando)
+
+        var elements = words[1].split(',');
+
+        if (words.length > 1 && elements.length != 0) {
+            dataService.addElements(ctx, listName, elements);
+            ctx.reply('elementos añadidos');
+
+            var listOptions = dataService.getElementsList(ctx, listName);
+            if (listOptions.length) {
+
+                var res = 'Las opciones de tu lista ' + listName + ' son: \n\n';
+                for (var i = 0; i < listOptions.length; i++) {
+                    res += listOptions[i] + '\n'
+                }
+                ctx.reply(res);
+
+            } else {
+                ctx.reply('Todavía no has añadido ninguna opción en tu lista. \n Para más ayuda no dudes en usar el comando /ayuda');
+            }
+
+        } else {
+            console.log('error');
+            //todo: mandar mensaje diciendo como se usa
+            ctx.reply('elementos NO añadidos');
+        }
+    } catch (e) {
+        if (e.message == errInitMsg) {
+            ctx.reply(e.message);
+        } else  {
+            ctx.reply(e.msg);
         }
     }
 

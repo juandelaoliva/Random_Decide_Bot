@@ -73,7 +73,10 @@ function addList(ctx, listName) {
             //si no existe ya la lista con ese nombre la creo
             lists[listName] = { 0: 'enabled' };
         } else {
-            console.log('esa lista ya existe')
+            throw {
+                id: 003,
+                msg: 'La lista que has intentado añadir ya existe \n Para ver las listas creadas puedes usar el comando /listas'
+            };
         }
     }//todo crear else para lanzar error y cachearlo en bot.js
     //guardo los usuarios
@@ -93,8 +96,38 @@ function addElement(ctx, listName, element) {
             arrayElements.push(element);
             lists[listName] = arrayElements;
         } else {
-            console.log('error añadiendo elemento porque la lista no existe');
-            //todo lanzar error para que el bot.js lo cachee y mande explicacion
+            throw {
+                id: 001,
+                msg: 'Error añadiendo elemento porque la lista no existe. \n Si necesitas ayuda no dudes en usar el comando /ayuda'
+            };
+        }
+    }//todo crear else para lanzar error y cachearlo en bot.js
+    //guardo los usuarios
+    saveUsers();
+}
+
+function addElements(ctx, listName, elements) {
+    var uid = checkUser(ctx);
+    var lists;
+    //compruebo que el usuario tenga su lista de listas
+    if (users[uid].lists) {
+        //guardo sus listas en la variable lists
+        lists = users[uid].lists
+        if (lists[listName]) {
+            var arrayElements = Object.values(lists[listName]);
+            for (var i = 0; i < elements.length; i++) {
+                if (elements[i] != '' && elements[i] != ' ') {
+                    arrayElements.push(elements[i].trim());
+                    lists[listName] = arrayElements;
+                }
+
+            }
+
+        } else {
+            throw {
+                id: 002,
+                msg: 'Error añadiendo elementos porque la lista no existe. \n Si necesitas ayuda no dudes en usar el comando /ayuda'
+            };
         }
     }//todo crear else para lanzar error y cachearlo en bot.js
     //guardo los usuarios
@@ -135,7 +168,7 @@ function getElementsList(ctx, listName) {
             throw TypeError('La lista seleccionada no existe, usa el comando /lists para ver las listas creadas');
         }
 
-       
+
     }
 }
 
@@ -159,7 +192,7 @@ function getRandom(ctx, listName) {
             throw TypeError('La lista seleccionada no existe, usa el comando /lists para ver las listas creadas');
         }
 
-       
+
     }
 }
 
@@ -187,6 +220,7 @@ module.exports = {
     getUserList,
     addList,
     addElement,
+    addElements,
     getLists,
     getElementsList,
     getRandom
