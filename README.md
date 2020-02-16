@@ -1,5 +1,5 @@
-# Telegram Cagómetro Bot
-Bienvenido al cagómetro
+# Telegram Random Decide Bot
+Bienvenido al random decide bot
 
 ## Installation
 - copy the `config.js.sample` to `config.js` and enter your bot token
@@ -8,4 +8,4 @@ Bienvenido al cagómetro
 
 
 
-Project based on [LeoDJ's telegram-counter-bot](https://github.com/LeoDJ/telegram-counter-bot)
+Project based on [juandelaoliva's telegram-counter-bot](https://github.com/juandelaoliva/Counter_Bot)
