@@ -196,6 +196,53 @@ function getRandom(ctx, listName) {
     }
 }
 
+function getCoolRandom(ctx, listName) {
+    var rep;
+
+    if (users.rep) {
+        rep = users.rep;
+        console.log('eyyes')
+    } else {
+        rep = 1;
+    }
+
+
+
+    console.log(rep)
+
+
+    var uid = checkUser(ctx);
+    var lists;
+    if (users[uid].lists) {
+        //guardo sus listas en la variable lists
+        lists = users[uid].lists
+
+        if (lists[listName]) {
+            var arrayElements = Object.values(lists[listName]);
+            if (arrayElements.includes('enabled')) {
+                arrayElements.splice(arrayElements.indexOf('enabled'), 1);
+            }
+            var res;
+            if (rep % 3 == 0) {
+                res = arrayElements[6];
+            } else {
+                res = arrayElements[Math.floor(Math.random() * Math.floor(arrayElements.length))];
+            }
+            rep++;
+            console.log(rep);
+            users.rep = rep;
+            saveUsers();
+            return res;
+
+
+        } else {
+            throw TypeError('La lista seleccionada no existe, usa el comando /lists para ver las listas creadas');
+        }
+
+
+    }
+}
+
 
 
 function checkUser(ctx) {
@@ -223,5 +270,6 @@ module.exports = {
     addElements,
     getLists,
     getElementsList,
-    getRandom
+    getRandom,
+    getCoolRandom
 };

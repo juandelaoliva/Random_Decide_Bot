@@ -276,7 +276,7 @@ bot.command('decide', ctx => {
 
         if (words.length && words.length < 2) {
 
-            var res = dataService.getRandom(ctx, words[0]);
+            var res = dataService.getCoolRandom(ctx, words[0]);
             if (res) {
 
                 ctx.reply(res);
