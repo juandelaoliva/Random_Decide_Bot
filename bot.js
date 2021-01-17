@@ -124,7 +124,7 @@ bot.command('addlista', ctx => {
     } catch (e) {
         if (e.message == errInitMsg) {
             ctx.reply(e.message);
-        } else  {
+        } else {
             ctx.reply(e.msg);
         }
     }
@@ -155,7 +155,7 @@ bot.command('add', ctx => {
     } catch (e) {
         if (e.message == errInitMsg) {
             ctx.reply(e.message);
-        } else  {
+        } else {
             ctx.reply(e.msg);
         }
     }
@@ -171,22 +171,16 @@ bot.command('elimina', ctx => {
         var words = ctx.message.text.split(' ');
         words.shift(); //borramos la primera palabra  (que es la llamada al comando)
 
-        if (words.length > 1) {
-            var listName = words[0];
-            //CHECK LIST
-            words.shift();
-            dataService.deleteElement(ctx, listName);
-            ctx.reply('Último elemento de la lista eliminado');
+        var listName = words[0];
+        //CHECK LIST
+        words.shift();
+        dataService.deleteElement(ctx, listName);
+        ctx.reply('Último elemento de la lista eliminado');
 
-        } else {
-            console.log('error');
-            //todo: mandar mensaje diciendo como se usa
-            ctx.reply('elemento NO eliminado');
-        }
     } catch (e) {
         if (e.message == errInitMsg) {
             ctx.reply(e.message);
-        } else  {
+        } else {
             ctx.reply(e.msg);
         }
     }
@@ -231,7 +225,7 @@ bot.command('addvarios', ctx => {
     } catch (e) {
         if (e.message == errInitMsg) {
             ctx.reply(e.message);
-        } else  {
+        } else {
             ctx.reply(e.msg);
         }
     }
@@ -262,7 +256,7 @@ bot.command('listas', ctx => {
             ctx.reply(e.message);
         } else if (e instanceof TypeError) {
             ctx.reply(unknownError);
-          
+
         }
     }
 

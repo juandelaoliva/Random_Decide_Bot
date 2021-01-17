@@ -106,7 +106,7 @@ function addElement(ctx, listName, element) {
     saveUsers();
 }
 
-function deleteElement(ctx, listName, element) {
+function deleteElement(ctx, listName) {
     var uid = checkUser(ctx);
     var lists;
     //compruebo que el usuario tenga su lista de listas
