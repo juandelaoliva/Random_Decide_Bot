@@ -28,6 +28,8 @@ const helpMsg = `Comandos de referencia:
 /mostrar nombrelista\nMuestra las opciones de la lista "nombrelista"\n
 /listas\nMuestra todas las listas\n
 /decide nombrelista\nMuestra una de las opciones de manera aleatoria\n
+/addvarios nombrelista:\n Añade varios elementos a una lista separados por comas\n
+/elimina nombrelista:\n Elimina el último elemento añadido a la lista\n
 
 `;
 
@@ -173,9 +175,8 @@ bot.command('elimina', ctx => {
             var listName = words[0];
             //CHECK LIST
             words.shift();
-            var element = words.join(' ');
-            dataService.deleteElement(ctx, listName, element);
-            ctx.reply('elemento eliminado');
+            dataService.deleteElement(ctx, listName);
+            ctx.reply('Último elemento de la lista eliminado');
 
         } else {
             console.log('error');
