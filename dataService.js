@@ -115,7 +115,7 @@ function deleteElement(ctx, listName, element) {
         lists = users[uid].lists
         if (lists[listName]) {
             var arrayElements = Object.values(lists[listName]);
-            arrayElements.pop(element);
+            arrayElements.pop();
             lists[listName] = arrayElements;
         } else {
             throw {
