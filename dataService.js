@@ -106,6 +106,28 @@ function addElement(ctx, listName, element) {
     saveUsers();
 }
 
+function deleteElement(ctx, listName, element) {
+    var uid = checkUser(ctx);
+    var lists;
+    //compruebo que el usuario tenga su lista de listas
+    if (users[uid].lists) {
+        //guardo sus listas en la variable lists
+        lists = users[uid].lists
+        if (lists[listName]) {
+            var arrayElements = Object.values(lists[listName]);
+            arrayElements.pop(element);
+            lists[listName] = arrayElements;
+        } else {
+            throw {
+                id: 001,
+                msg: 'Error eliminando elemento porque la lista no existe. \n Si necesitas ayuda no dudes en usar el comando /ayuda'
+            };
+        }
+    }//todo crear else para lanzar error y cachearlo en bot.js
+    //guardo los usuarios
+    saveUsers();
+}
+
 function addElements(ctx, listName, elements) {
     var uid = checkUser(ctx);
     var lists;
@@ -223,5 +245,6 @@ module.exports = {
     addElements,
     getLists,
     getElementsList,
-    getRandom
+    getRandom,
+    deleteElement
 };
