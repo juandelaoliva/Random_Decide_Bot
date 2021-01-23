@@ -29,7 +29,7 @@ const helpMsg = `Comandos de referencia:
 /listas\nMuestra todas las listas\n
 /decide nombrelista\nMuestra una de las opciones de manera aleatoria\n
 /addvarios nombrelista:\n Añade varios elementos a una lista separados por comas\n
-/elimina nombrelista:\n Elimina el último elemento añadido a la lista\n
+/borra nombrelista nombreopción\n Elimina la opción de la lista deseada\n
 
 `;
 
@@ -163,28 +163,6 @@ bot.command('add', ctx => {
 
     //logOutMsg(ctx, aboutMsg);
 
-});
-
-bot.command('elimina', ctx => {
-    logMsg(ctx);
-    try {
-        var words = ctx.message.text.split(' ');
-        words.shift(); //borramos la primera palabra  (que es la llamada al comando)
-
-        var listName = words[0];
-        //CHECK LIST
-        words.shift();
-        dataService.deleteElement(ctx, listName);
-        ctx.reply('Último elemento de la lista eliminado');
-
-    } catch (e) {
-        if (e.message == errInitMsg) {
-            ctx.reply(e.message);
-        } else {
-            ctx.reply(e.msg);
-        }
-    }
-    //logOutMsg(ctx, aboutMsg);
 });
 
 bot.command('borra', ctx => {
