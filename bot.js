@@ -184,10 +184,36 @@ bot.command('elimina', ctx => {
             ctx.reply(e.msg);
         }
     }
-
-
     //logOutMsg(ctx, aboutMsg);
+});
 
+bot.command('borra', ctx => {
+    logMsg(ctx);
+    try {
+        var words = ctx.message.text.split(' ');
+        words.shift(); //borramos la primera palabra  (que es la llamada al comando)
+
+        if (words.length > 1) {
+            var listName = words[0];
+            //CHECK LIST
+            words.shift();
+            var element = words.join(' ');
+            dataService.removeElement(ctx, listName, element);
+            ctx.reply('elemento borrado');
+
+        } else {
+            console.log('error');
+            //todo: mandar mensaje diciendo como se usa
+            ctx.reply('elemento NO eliminado');
+        }
+    } catch (e) {
+        if (e.message == errInitMsg) {
+            ctx.reply(e.message);
+        } else {
+            ctx.reply(e.msg);
+        }
+    }
+    //logOutMsg(ctx, aboutMsg);
 });
 
 bot.command('addvarios', ctx => {
