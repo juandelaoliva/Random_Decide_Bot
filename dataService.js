@@ -75,7 +75,7 @@ function addList(ctx, listName) {
         } else {
             throw {
                 id: 003,
-                msg: 'La lista que has intentado añadir ya existe \n Para ver las listas creadas puedes usar el comando /listas'
+                msg: 'The list you tried to add already exists\nTo view the created lists you can use the command /lists'
             };
         }
     }//todo crear else para lanzar error y cachearlo en bot.js
@@ -98,7 +98,7 @@ function addElement(ctx, listName, element) {
         } else {
             throw {
                 id: 001,
-                msg: 'Error añadiendo elemento porque la lista no existe. \n Si necesitas ayuda no dudes en usar el comando /ayuda'
+                 msg: 'Error adding the item because the list does not exist.\nIf you need help do not hesitate to use the /help command.'
             };
         }
     }//todo crear else para lanzar error y cachearlo en bot.js
@@ -120,7 +120,7 @@ function removeElement(ctx, listName, element) {
         } else {
             throw {
                 id: 001,
-                msg: 'Error añadiendo elemento porque la lista no existe. \n Si necesitas ayuda no dudes en usar el comando /ayuda'
+                msg: 'Error adding the item because the list does not exist.\nIf you need help do not hesitate to use the /help command.'
             };
         }
     }//todo crear else para lanzar error y cachearlo en bot.js
@@ -148,7 +148,7 @@ function addElements(ctx, listName, elements) {
         } else {
             throw {
                 id: 002,
-                msg: 'Error añadiendo elementos porque la lista no existe. \n Si necesitas ayuda no dudes en usar el comando /ayuda'
+                msg: 'Error adding the item because the list does not exist.\nIf you need help do not hesitate to use the /help command.'
             };
         }
     }//todo crear else para lanzar error y cachearlo en bot.js
@@ -187,7 +187,7 @@ function getElementsList(ctx, listName) {
             }
             return arrayElements;
         } else {
-            throw TypeError('La lista seleccionada no existe, usa el comando /lists para ver las listas creadas');
+            throw TypeError('The selected list does not exist, use the /lists command to see the existing lists.');
         }
 
 
@@ -211,7 +211,7 @@ function getRandom(ctx, listName) {
             return res;
 
         } else {
-            throw TypeError('La lista seleccionada no existe, usa el comando /lists para ver las listas creadas');
+            throw TypeError('The selected list does not exist, use the /lists command to see the existing lists.');
         }
 
 
@@ -224,7 +224,7 @@ function checkUser(ctx) {
     var uid = ctx.chat.id;
     if (!users[uid]) {
         registerUser(ctx);
-        throw TypeError('Este chat no estaba iniciado de manera correcta, hemos solucionado es problema. \n\n Por favor vauelva a intentarlo de nuevo');
+        throw TypeError('This chat was not starting correctly, we have fixed this problem. \n\nPlease try again.');
     }
     else {
         return uid;
