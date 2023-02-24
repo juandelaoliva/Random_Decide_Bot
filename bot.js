@@ -8,28 +8,27 @@ const config = require('./config');
 const dataService = require('./dataService');
 
 
-
 var _ = require('lodash');
 
 dataService.loadUsers();
 
 const bot = new Telegraf(config.botToken);
 
-const initMsg = `Bienvenido a DecideBot!
+const initMsg = `Wellcome to DecideBot!
 
-Para más información puedes ejecutar el comando /ayuda 
+For more information you can use the command /help 
 `;
 
-const helpMsg = `Comandos de referencia:
+const helpMsg = `Reference commands:
 
-/start\nIniciar bot\n
-/addlista nombrelista\nAñade una lista con el nombre "nombrelista"\n
-/add nombrelista nombreopción\nAñade una la opción "nombreopción" a la lista "nombrelista" \n
-/mostrar nombrelista\nMuestra las opciones de la lista "nombrelista"\n
-/listas\nMuestra todas las listas\n
-/decide nombrelista\nMuestra una de las opciones de manera aleatoria\n
-/addvarios nombrelista:\n Añade varios elementos a una lista separados por comas\n
-/borra nombrelista nombreopción\n Elimina la opción de la lista deseada\n
+/start\nStart bot\n
+[/addlist + listName]\nAdds a list with the name "listName"\n
+[/add + listName + itemName]\nAdd the item "itemName" to the list "listName" \n
+[/show + listName]\nShows all the items in the list "listName"\n
+/lists\nShows all the lists\n
+[/random + listName]\nShows one random item from the list\n
+[/addmultiple + listName + ':' + item1, item2]\nAdd multiple items to a list. Items must be separated by commas\n
+[/delete + listName + itemName]\nDeletes the item from a specific list\n
 
 `;
 
@@ -87,13 +86,13 @@ bot.command('start', ctx => {
     ctx.reply(initMsg);
 
     setTimeout(() => {
-        ctx.reply("Bienvenido a Decide_Bot");
+        ctx.reply("Wellcome to Decide_Bot");
     }, 50);  //delay para enviar este mensaje como segundo mensaje
 });
 
 
 
-bot.command('ayuda', ctx => {
+bot.command('help', ctx => {
     logMsg(ctx);
     logOutMsg(ctx, helpMsg);
     ctx.reply(helpMsg);
@@ -107,7 +106,7 @@ bot.command('about', ctx => {
 
 const errInitMsg = 'Este chat no estaba iniciado de manera correcta, hemos solucionado es problema. \n\n Por favor vauelva a intentarlo de nuevo';
 const unknownError = 'Parece que algo ha fallado, vuelve a intentarlo más tarde'
-bot.command('addlista', ctx => {
+bot.command('addlist', ctx => {
     logMsg(ctx);
     try {
         var words = ctx.message.text.split(' ');
@@ -115,11 +114,11 @@ bot.command('addlista', ctx => {
 
         if (words.length && words.length < 2) {
             dataService.addList(ctx, words);
-            ctx.reply('lista añadida');
+            ctx.reply('🚀 List "' + words + '" created 🚀');
         } else {
             console.log('solo tenía una palabra o más de una');
             //todo: mandar mensaje diciendo como se usa
-            ctx.reply('lista NO añadida');
+            ctx.reply('Error: please add the command and the name of your list. Example "/addlist Films"');
         }
     } catch (e) {
         if (e.message == errInitMsg) {
@@ -145,12 +144,12 @@ bot.command('add', ctx => {
             words.shift();
             var element = words.join(' ');
             dataService.addElement(ctx, listName, element);
-            ctx.reply('elemento añadido');
+            ctx.reply('Item added!');
 
         } else {
             console.log('error');
             //todo: mandar mensaje diciendo como se usa
-            ctx.reply('elemento NO añadido');
+            ctx.reply('Error: Item NOT added. Use the command /help to check how to properly write the commands :)');
         }
     } catch (e) {
         if (e.message == errInitMsg) {
@@ -165,7 +164,7 @@ bot.command('add', ctx => {
 
 });
 
-bot.command('borra', ctx => {
+bot.command('delete', ctx => {
     logMsg(ctx);
     try {
         var words = ctx.message.text.split(' ');
@@ -177,12 +176,12 @@ bot.command('borra', ctx => {
             words.shift();
             var element = words.join(' ');
             dataService.removeElement(ctx, listName, element);
-            ctx.reply('elemento borrado');
+            ctx.reply('item deleted');
 
         } else {
             console.log('error');
             //todo: mandar mensaje diciendo como se usa
-            ctx.reply('elemento NO eliminado');
+            ctx.reply('item NOT deleted');
         }
     } catch (e) {
         if (e.message == errInitMsg) {
@@ -194,7 +193,7 @@ bot.command('borra', ctx => {
     //logOutMsg(ctx, aboutMsg);
 });
 
-bot.command('addvarios', ctx => {
+bot.command('addmultiple', ctx => {
     logMsg(ctx);
     try {
         var words = ctx.message.text.split(':');
@@ -206,25 +205,25 @@ bot.command('addvarios', ctx => {
 
         if (words.length > 1 && elements.length != 0) {
             dataService.addElements(ctx, listName, elements);
-            ctx.reply('elementos añadidos');
+            ctx.reply('Items added!');
 
             var listOptions = dataService.getElementsList(ctx, listName);
             if (listOptions.length) {
 
-                var res = 'Las opciones de tu lista ' + listName + ' son: \n\n';
+                var res = listName + ': \n\n';
                 for (var i = 0; i < listOptions.length; i++) {
                     res += listOptions[i] + '\n'
                 }
                 ctx.reply(res);
 
             } else {
-                ctx.reply('Todavía no has añadido ninguna opción en tu lista. \n Para más ayuda no dudes en usar el comando /ayuda');
+                ctx.reply('There are no items here yet\n To add an item you can use the command [/add + listName + item]');
             }
 
         } else {
             console.log('error');
             //todo: mandar mensaje diciendo como se usa
-            ctx.reply('elementos NO añadidos');
+            ctx.reply('Error: Items NOT added');
         }
     } catch (e) {
         if (e.message == errInitMsg) {
@@ -239,20 +238,20 @@ bot.command('addvarios', ctx => {
 
 });
 
-bot.command('listas', ctx => {
+bot.command('lists', ctx => {
     logMsg(ctx);
     try {
         var listsNames = dataService.getLists(ctx);
         if (listsNames.length) {
 
-            var res = 'Tus listas son: \n\n';
+            var res = '📝 Your lists: \n\n';
             for (var i = 0; i < listsNames.length; i++) {
                 res += listsNames[i] + '\n'
             }
             ctx.reply(res);
 
         } else {
-            ctx.reply('no hay ninguna lista')
+            ctx.reply('Any list created yet. For creating a list you can use the command [/addlist + listName]')
         }
 
     } catch (e) {
@@ -268,7 +267,7 @@ bot.command('listas', ctx => {
 });
 
 
-bot.command('mostrar', ctx => {
+bot.command('show', ctx => {
     logMsg(ctx);
     try {
         var words = ctx.message.text.split(' ');
@@ -279,14 +278,14 @@ bot.command('mostrar', ctx => {
             var listsNames = dataService.getElementsList(ctx, words[0]);
             if (listsNames.length) {
 
-                var res = 'Las opciones de tu lista ' + words[0] + ' son: \n\n';
+                var res = 'Here you have the items of the list ' + words[0] + ': \n\n';
                 for (var i = 0; i < listsNames.length; i++) {
                     res += listsNames[i] + '\n'
                 }
                 ctx.reply(res);
 
             } else {
-                ctx.reply('no hay opciones en la lista lista')
+                ctx.reply('There are no items here yet\n To add an item you can use the command [/add + listName + item]')
             }
         }
     } catch (e) {
@@ -299,7 +298,7 @@ bot.command('mostrar', ctx => {
 
 });
 
-bot.command('decide', ctx => {
+bot.command('random', ctx => {
     logMsg(ctx);
     try {
         var words = ctx.message.text.split(' ');
@@ -313,7 +312,7 @@ bot.command('decide', ctx => {
                 ctx.reply(res);
 
             } else {
-                ctx.reply('no hay opciones en la lista lista')
+                ctx.reply('There are no items here yet\n To add an item you can use the command [/add + listName + item]')
             }
         }
     } catch (e) {
