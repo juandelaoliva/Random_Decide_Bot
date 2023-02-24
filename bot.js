@@ -11,8 +11,10 @@ const dataService = require('./dataService');
 var _ = require('lodash');
 
 dataService.loadUsers();
+console.log('Deplooooooooooo')
 
 const bot = new Telegraf(config.botToken);
+console.log(config.botToken)
 
 const initMsg = `Wellcome to DecideBot!
 
